@@ -1,4 +1,5 @@
 /**************************************************************************************************************************************
+*	UDP：无连接，不可靠
 *
 *   字节序：数据以字节流的方式进行传输，底层都是采用二进制，字节流的顺序是由架构决定的，现在假设使用X86架构，是采用小端存储
 *	网络字节序：
@@ -22,6 +23,11 @@
 *   htonl:把本地字节序的一个长整型转换为网络字节序
 *   ntohs:把网络字节序的一个短整型转换为本地字节序
 *   ntohl:把网络字节序的一个长整型转换为本地字节序
+*
+*	atoi：字符串转为整型
+*
+*	inet_aton:字符串形式的点分十进制转为网络字节序
+*	inet_addr:点分十进制的主机IP地址字符串转为网络字节序
 * ***********************************************************************************************************************************/
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -37,6 +43,24 @@
 #include <netinet/udp.h>
 #include <stdlib.h>
 #include <string.h>
+
+/*
+ * sendto  recvfrom
+ *
+ * 第一个参数：sockfd指的是创建的套接字对应的文件描述符，其实是socket()函数的返回值。
+ *
+ * 第二个参数：buf指的是要发送的消息对应的缓冲区的地址，const void * 表示地址类型任意。
+ *
+ * 第三个参数：len指的是要发送的消息的大小，以字节为单位，不要超过UDP的数据包大小！
+ *
+ * 第四个参数：flags指的是发送消息的标志，一般设置为0，和系统调用write()函数作用类似。
+ *
+ * 第五个参数：dest_addr指的是目标主机的IP地址，因为UDP是无连接的，需要指定接收端。
+ *
+ * 第六个参数：addrlen指的是目标主机的IP地址的大小，一般通过sizeof()进行计算即可得到。 
+ * 
+*/
+
 
 int main(int argc,char *argv[])
 {
@@ -56,9 +80,10 @@ int main(int argc,char *argv[])
 	struct sockaddr_in  host_addr;
 
 	host_addr.sin_family 		= AF_INET; 						//协议族，是固定的
-	host_addr.sin_port   		= htons(atoi(argv[1]));			//目标端口，必须转换为网络字节序
+	host_addr.sin_port   		= htons(atoi(argv[1]));			//目标端口，必须转换为网络字节序   
 	host_addr.sin_addr.s_addr = inet_addr(argv[2]);				//目标地址 "192.168.64.xxx"  已经转换为网络字节序
-	
+	                            //INADDR_ANY
+
 	bind(udp_socket,(struct sockaddr *)&host_addr, sizeof(host_addr));
 
 	//3.循环调用recvfrom准备接收数据

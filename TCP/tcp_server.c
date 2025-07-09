@@ -1,4 +1,11 @@
-
+/*
+ * TCP：有连接，可靠
+ *
+ * 基于字节流的全双工通信
+ * 
+ * 
+ * 
+*/
 
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -46,6 +53,15 @@ int main(int argc, char const *argv[])
 	socklen_t client_len = sizeof(client);
 
 	int connect_fd = accept(tcp_socket,(struct sockaddr *)&client,&client_len); //会阻塞
+	/*
+	 * 服务器如果和客户端连接成功，accept()函数会返回一个新的套接字描述符，
+	 * 这个新的套接字描述符并不处于监听状态，
+	 * 也就是说服务器和连接成功的客户端需要通过这个新的文件描述符进行数据收发。
+	 *
+	*/
+
+	//TCP的三次握手是在客户端调用connect()期间和服务器调用accept()期间才会发生的
+
 	char buf[128] = {0};
 
 	//5.说明双方建立连接，此时可以接收数据
