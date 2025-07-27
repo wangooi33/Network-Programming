@@ -65,11 +65,13 @@ int main()
 
         if (n == -1) 
 		{
-            if (errno == EAGAIN || errno == EWOULDBLOCK) {
+            if (errno == EAGAIN || errno == EWOULDBLOCK) 
+			{
                 // 没有数据，继续轮询
                 usleep(100000);  // 睡100ms防止CPU过高
                 continue;
-            } else {
+            } else 
+			{
                 perror("recvfrom");
                 break;
             }

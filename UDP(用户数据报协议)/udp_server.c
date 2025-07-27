@@ -61,6 +61,29 @@
  * 
 */
 
+/*
+ * 要指定UDP协议进行通信，需要先调用socket函数创建UDP套接字，
+ * 如果只打算向对方主机发送数据包，则可以调用sendto()函数或者sendmsg()函数，
+ * 注意要把对方主机的有效IP地址作为参数。
+ * 如果打算接收对方主机发送的数据包，则需要提前调用bind()函数把UDP套接字和本地主机地址进行绑定,
+ * 然后调用recvfrom()函数来接收数据包。
+ *
+*/
+
+/*
+ * struct sockaddr_in
+ * {
+ * 		sa_family_t		sin_family;//协议族，总是设置为AF_INET
+ * 		in_port_t		sin_port;//端口号（网络字节序）
+ * 		struct inaddr	sin_addr;//ip地址（网络字节序）
+ * }
+ * struct in_addr
+ * {
+ * 		uint32_t		s_addr;
+ * }
+ *
+*/
+
 
 int main(int argc,char *argv[])
 {
@@ -82,7 +105,7 @@ int main(int argc,char *argv[])
 	host_addr.sin_family 		= AF_INET; 						//协议族，是固定的
 	host_addr.sin_port   		= htons(atoi(argv[1]));			//目标端口，必须转换为网络字节序   
 	host_addr.sin_addr.s_addr = inet_addr(argv[2]);				//目标地址 "192.168.64.xxx"  已经转换为网络字节序
-	                            //INADDR_ANY
+	                            //INADDR_ANY，绑定到所有本地接口
 
 	bind(udp_socket,(struct sockaddr *)&host_addr, sizeof(host_addr));
 

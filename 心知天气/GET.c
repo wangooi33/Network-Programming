@@ -17,7 +17,7 @@
 
 #define PORT 80
 #define IP "116.62.81.138"
-#define KEY "xxx"		//私钥
+#define KEY "xxx"		//私钥，请修改成自己的私钥
 #define LOCAL "fushun"  //地区
 
 

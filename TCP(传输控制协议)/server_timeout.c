@@ -13,7 +13,8 @@
 #define BACKLOG 5
 #define TIMEOUT 10  // 秒
 
-int main() {
+int main() 
+{
     int server_fd, conn_fd;
     struct sockaddr_in server_addr, client_addr;
     socklen_t addr_len = sizeof(client_addr);
@@ -25,7 +26,7 @@ int main() {
         exit(1);
     }
 
-    // 2. 设置地址复用
+    // 2. 设置地址复用（套接字属性）
     int reuse = 1;
     setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR, &reuse, sizeof(reuse));
 
@@ -35,14 +36,16 @@ int main() {
     server_addr.sin_port = htons(PORT);
     server_addr.sin_addr.s_addr = INADDR_ANY;
 
-    if (bind(server_fd, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0) {
+    if (bind(server_fd, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0) 
+	{
         perror("bind");
         close(server_fd);
         exit(1);
     }
 
     // 4. 监听
-    if (listen(server_fd, BACKLOG) < 0) {
+    if (listen(server_fd, BACKLOG) < 0) 
+	{
         perror("listen");
         close(server_fd);
         exit(1);
@@ -60,11 +63,13 @@ int main() {
     timeout.tv_usec = 0;
 
     int ret = select(server_fd + 1, &readfds, NULL, NULL, &timeout);
-    if (ret == -1) {
+    if (ret == -1) 
+	{
         perror("select");
         close(server_fd);
         exit(1);
-    } else if (ret == 0) {
+    } else if (ret == 0) 
+	{
         fprintf(stderr, "Timeout: no client connected within %d seconds.\n", TIMEOUT);
         close(server_fd);
         exit(1);
@@ -72,7 +77,8 @@ int main() {
 
     // 6. 有连接请求
     conn_fd = accept(server_fd, (struct sockaddr *)&client_addr, &addr_len);
-    if (conn_fd < 0) {
+    if (conn_fd < 0) 
+	{
         perror("accept");
         close(server_fd);
         exit(1);
@@ -89,11 +95,14 @@ int main() {
     // 8. 接收数据
     char buffer[1024];
     int n = recv(conn_fd, buffer, sizeof(buffer) - 1, 0);
-    if (n < 0) {
+    if (n < 0) 
+	{
         perror("recv timeout or error");
-    } else if (n == 0) {
+    } else if (n == 0) 
+	{
         printf("Client closed connection.\n");
-    } else {
+    } else 
+	{
         buffer[n] = '\0';
         printf("Received: %s\n", buffer);
     }

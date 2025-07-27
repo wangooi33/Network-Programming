@@ -1,11 +1,3 @@
-/*
- * TCP：有连接，可靠
- *
- * 基于字节流的全双工通信
- * 
- * 
- * 
-*/
 
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -23,8 +15,8 @@
 #include <string.h>
 #include <sys/types.h>
  #include <unistd.h>
-//TCP服务器代码   ./xxx   port
 
+//TCP服务器代码   ./xxx   port
 
 int main(int argc, char const *argv[])
 {
@@ -45,8 +37,10 @@ int main(int argc, char const *argv[])
 
 	bind(tcp_socket,(struct sockaddr *)&host_addr, sizeof(host_addr));
 
+	/****************************************************************************************/
+
 	//3.设置监听  队列最大容量是5
-	listen(tcp_socket,5);
+	listen(tcp_socket,5);//不会阻塞
 
 	//4.等待接受客户端的连接请求
 	struct sockaddr_in  client;
